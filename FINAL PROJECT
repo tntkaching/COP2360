@@ -1,0 +1,88 @@
+using System;
+
+// Define Contractor
+public class Contractor
+{
+    public string Name { get; set; }
+    public string Number { get; set; }
+    public DateTime StartDate { get; set; }
+
+    public Contractor(string name, string number, DateTime startDate)
+    {
+        Name = name;
+        Number = number;
+        StartDate = startDate;
+    }
+
+    // Default constructor
+    public Contractor() {}
+}
+
+// Define Subcontractor class from Contractor
+public class Subcontractor : Contractor
+{
+    public int Shift { get; set; } // 1  day 2 night
+    public double HourlyPayRate { get; set; }
+
+    public Subcontractor(string name, string number, DateTime startDate, int shift, double hourlyPayRate)
+        : base(name, number, startDate)
+    {
+        Shift = shift;
+        HourlyPayRate = hourlyPayRate;
+    }
+
+    // Calculate pay with 3% night shift
+    public float CalculatePay(int hoursWorked)
+    {
+        double pay = HourlyPayRate * hoursWorked;
+        if (Shift == 2)
+        {
+            pay *= 1.03; // Apply 3% for night shift
+        }
+        return (float)pay;
+    }
+
+    // Optional: Default
+    public Subcontractor() {}
+}
+
+// Step 3: Demonstrate classes
+class Program
+{
+    public static void Main(string[] args)
+    {
+        // Create/demonstrate Subcontractor objects
+        Subcontractor subcontractor1 = new Subcontractor("John Doe", "12345", DateTime.Now, 1, 50.0);
+        Subcontractor subcontractor2 = new Subcontractor("Jane Smith", "67890", DateTime.Now, 2, 55.0);
+
+        int hoursWorked = 40; // Example hours worked
+
+        Console.WriteLine($"{subcontractor1.Name} earned ${subcontractor1.CalculatePay(hoursWorked)} working day shift.");
+        Console.WriteLine($"{subcontractor2.Name} earned ${subcontractor2.CalculatePay(hoursWorked)} working night shift.");
+
+        // Allow user to create more subcontractor instances
+        Console.Write("Enter the number of subcontractors to create: ");
+        int numSubcontractors = int.Parse(Console.ReadLine());
+
+        for (int i = 0; i < numSubcontractors; i++)
+        {
+            Console.Write("Enter name: ");
+            string name = Console.ReadLine();
+            Console.Write("Enter number: ");
+            string number = Console.ReadLine();
+            Console.Write("Enter start date (yyyy-mm-dd): ");
+            DateTime startDate = DateTime.Parse(Console.ReadLine());
+            Console.Write("Enter shift (1 for day, 2 for night): ");
+            int shift = int.Parse(Console.ReadLine());
+            Console.Write("Enter hourly pay rate: ");
+            double hourlyPayRate = double.Parse(Console.ReadLine());
+
+            Subcontractor subcontractor = new Subcontractor(name, number, startDate, shift, hourlyPayRate);
+            Console.WriteLine($"{subcontractor.Name} has been created with number {subcontractor.Number} and start date {subcontractor.StartDate.ToShortDateString()}");
+
+            Console.Write("Enter hours worked: ");
+            int hours = int.Parse(Console.ReadLine());
+            Console.WriteLine($"{subcontractor.Name} earned ${subcontractor.CalculatePay(hours)}.");
+        }
+    }
+}
